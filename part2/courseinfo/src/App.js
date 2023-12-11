@@ -26,6 +26,8 @@ const Content = (props) => {
 
 const Course = (props) => {
   const { name, parts } = props.course
+
+  //Reduce array of objects to sum of exercises
   const total = parts.reduce((sum, part) => sum + part.exercises, 0)
 
   return (
