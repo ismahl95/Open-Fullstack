@@ -1,5 +1,5 @@
 const Header = (props) => {
-  return <h1>{props.courseName}</h1>
+  return <h2>{props.courseName}</h2>
 }
 
 const Total = (props) => {
@@ -25,34 +25,69 @@ const Content = (props) => {
 }
 
 const Course = (props) => {
-  const { name, parts } = props.course
-
-  //Reduce array of objects to sum of exercises
-  const total = parts.reduce((sum, part) => sum + part.exercises, 0)
-
   return (
     <div>
-      <Header courseName={name} />
-      <Content parts={parts} />
-      <Total sumOfExercises={total} />
+      <h1>Web development curriculum</h1>
+      {props.course.map(course => (
+        <div key={course.id}>
+          <Header courseName={course.name} />
+          <Content parts={course.parts} />
+          <Total sumOfExercises={course.parts.reduce((sum, part) => sum + part.exercises, 0)} />
+        </div>
+      ))}
     </div>
   )
 }
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      { id: 1, name: 'Fundamentals of React', exercises: 10 },
-      { id: 2, name: 'Using props to pass data', exercises: 7 },
-      { id: 3, name: 'State of a component', exercises: 14 },
-      { id: 4, name: 'Redux', exercises: 11 }
-    ]
-  }
+  const courses = [
+    {
+      name: 'Half Stack application development',
+      id: 1,
+      parts: [
+        {
+          name: 'Fundamentals of React',
+          exercises: 10,
+          id: 1,
+        },
+        {
+          name: 'Using props to pass data',
+          exercises: 7,
+          id: 2,
+        },
+        {
+          name: 'State of a component',
+          exercises: 14,
+          id: 3,
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4,
+        },
+      ],
+    },
+    {
+      name: 'Node.js',
+      id: 2,
+      parts: [
+        {
+          name: 'Routing',
+          exercises: 3,
+          id: 1,
+        },
+        {
+          name: 'Middlewares',
+          exercises: 7,
+          id: 2,
+        },
+      ],
+    },
+  ]
 
   return (
     <div>
-      <Course course={course} />
+      <Course course={courses} />
     </div>
   )
 }
