@@ -18,6 +18,8 @@ const App = () => {
       })
   }
 
+  const baseUrl = "http://localhost:3001/persons"
+
   useEffect(hook, [])
 
   const addPerson = (event) => {
@@ -29,11 +31,19 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
-    }
 
+      create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
+  }
+
+  const create = newObject => {
+    const request = axios.post(baseUrl, newObject)
+    return request.then(response => response.data)
   }
 
   const handlePersonNameChange = (event) => {
@@ -56,12 +66,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter filtro={filtro} handleFilterChange={handleFilterChange}/>
+      <Filter filtro={filtro} handleFilterChange={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handlePersonNameChange={handlePersonNameChange}
-        newNumber={newNumber} handlePersonNumberChange={handlePersonNumberChange}/>
+        newNumber={newNumber} handlePersonNumberChange={handlePersonNumberChange} />
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} />
     </div>
   )
 }
