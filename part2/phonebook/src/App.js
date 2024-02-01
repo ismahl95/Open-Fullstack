@@ -22,22 +22,54 @@ const App = () => {
   useEffect(hook, [persons])
 
   const addPerson = (event) => {
-    event.preventDefault()
-    if (isPersonRepeated) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber
-      }
+    event.preventDefault();
 
-      PersonService.create(personObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
-          setNewName('')
-          setNewNumber('')
-        })
+    const existingPerson = persons.find(person => person.name === newName);
+    const sameNameAndNumber = persons
+      .find(person => person.name === newName && person.number === newNumber);
+
+    if (sameNameAndNumber) {
+      alert(`${newNumber} is already added to ${newName}`)
     }
+    else if (existingPerson) {
+      // The person with the same name already exists
+      if (window.confirm(`${newName} is already added to phonebook. Do you want to update the number?`)) {
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        updatePerson(existingPerson.id, updatedPerson);
+      }
+    }
+    else {
+      createPerson();
+    }
+  };
+
+  const createPerson = () => {
+    const personObject = {
+      name: newName,
+      number: newNumber
+    };
+
+    PersonService.create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch(error => {
+        console.error('Error creating person:', error);
+      });
+  }
+
+  const updatePerson = (id, updatedPerson) => {
+    PersonService.update(id, updatedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(person => (person.id === id ? returnedPerson : person)));
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch(error => {
+        console.error('Error updating person:', error);
+      });
   }
 
   const handlePersonNameChange = (event) => {
@@ -49,13 +81,11 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-  const handleFilterChange = (event) => { // Función para manejar el cambio
+  const handleFilterChange = (event) => {
     setFiltro(event.target.value);
   }
 
   const personsToShow = persons.filter(person => person.name.toLowerCase().startsWith(filtro.toLowerCase()));
-
-  const isPersonRepeated = persons.some(person => person.name === newName);
 
   return (
     <div>
