@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.personAdded {
+  color: green;
+  border: 4px solid green; /* Grosor y color del borde */
+  border-radius: 15px; /* Radio de las esquinas */
+  padding: 10px; /* Añadir algún espacio interno si es necesario */
+  margin: 5px;
+  background-color: rgb(163, 163, 163);
+}
