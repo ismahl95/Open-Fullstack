@@ -54,7 +54,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-
+  
     PersonService.create(personObject)
       .then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
@@ -68,6 +68,12 @@ const App = () => {
       })
       .catch((error) => {
         console.error('Error creating person:', error);
+        // Mostrar un mensaje de error específico en caso de fallo
+        setIsPersonAdded(true);
+        setAddedPersonName('Error creating person: ' + error.message);
+        setTimeout(() => {
+          setIsPersonAdded(false);
+        }, 5000);
       });
   };
 
@@ -87,6 +93,12 @@ const App = () => {
       })
       .catch((error) => {
         console.error('Error updating person:', error);
+        // Mostrar un mensaje de error específico en caso de fallo
+        setIsPersonAdded(true);
+        setAddedPersonName('Error updating person: ' + error.message);
+        setTimeout(() => {
+          setIsPersonAdded(false);
+        }, 5000);
       });
   };
 
@@ -111,7 +123,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {isPersonAdded && <Notification message={`Added ${addedPersonName}`} />}
+      {isPersonAdded && <Notification message={`Added ${addedPersonName}`} type={true} />}
       <Filter filtro={filtro} handleFilterChange={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm

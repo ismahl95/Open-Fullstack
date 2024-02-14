@@ -1,10 +1,13 @@
 // Cambios en el componente Notification
 import React from 'react'
 
-const Notification = ({ message }) => {
+const Notification = ({ message, type }) => {
+
+  let cssClass = type ? "personAdded" : "personDeleted" 
+
   return (
     <div>
-      <h1 className="personAdded">{message}</h1>
+      <h1 className={cssClass}>{message}</h1>
     </div>
   )
 }
